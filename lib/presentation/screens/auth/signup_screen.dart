@@ -2,7 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/common/custom_button.dart';
 import 'package:flutter_project/core/common/custom_text_field.dart';
+import 'package:flutter_project/data/repositories/auth_repository.dart';
+import 'package:flutter_project/data/services/service_locator.dart';
 import 'package:flutter_project/presentation/screens/auth/LoginScreen.dart';
+import 'package:flutter_project/presentation/screens/home/home_screen.dart';
+import 'package:flutter_project/router/app_router.dart';
 
 class signup_screen extends StatefulWidget {
   const signup_screen({super.key});
@@ -77,6 +81,30 @@ class _signup_screenState extends State<signup_screen> {
       return "password must be at least 4 character long." ;
     }
     return null;
+  }
+
+  Future<void> handleSignUp() async{
+    FocusScope.of(context).unfocus();
+    if(_formKey.currentState?.validate() ?? false) {
+      try {
+       await getIt<AuthRepository>().signup(
+            email: emailController.text,
+            username: usernameController.text,
+            name: nameController.text,
+            password: passwordController.text,
+            phoneNumber: phoneController.text,
+        );
+
+        getIt<AppRouter>().pushReplacement(home_screen());
+
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar( SnackBar(content: Text(e.toString())),
+        );
+      }
+    } else {
+      print("form validation failed");
+    }
   }
 
   @override
@@ -201,10 +229,7 @@ class _signup_screenState extends State<signup_screen> {
 
                       // --------- signup Button ----------
                       custom_button (
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          if(_formKey.currentState?.validate() ?? false) {};
-                        },
+                        onPressed: handleSignUp,
                         text: "Sign up",
                       ),
 
@@ -234,7 +259,8 @@ class _signup_screenState extends State<signup_screen> {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(content: Text("Navigating to Login Up page...")),
                                     );
-                                    Navigator.pop(context);
+                                    //Navigator.pop(context);
+                                    getIt<AppRouter>().pop();
                                   },
                               ),
                             ],

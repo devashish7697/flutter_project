@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/common/custom_button.dart';
 import 'package:flutter_project/core/common/custom_text_field.dart';
+import 'package:flutter_project/data/services/service_locator.dart';
 import 'package:flutter_project/presentation/screens/auth/signup_screen.dart';
+import 'package:flutter_project/router/app_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -156,12 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(content: Text("Navigating to Sign Up page...")),
                                 );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => signup_screen(),
-                                  )
-                                );
+                                // Navigator.push(
+                                //  context,
+                                //  MaterialPageRoute(
+                                //      builder: (context) => signup_screen(),
+                                //  )
+                                // );
+                                // we will use get_It for Navigation
+                                getIt<AppRouter>().push(const signup_screen());
                               },
                           ),
                         ],
