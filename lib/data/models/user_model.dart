@@ -60,17 +60,18 @@ class UserModel{
 
   factory UserModel.fromFirestore(DocumentSnapshot doc){
     final data = doc.data() as Map<String,dynamic>;
-    return UserModel(uid: doc.id,
-        email: data["username"],
-        username: data["username"],
-        name: data["name"],
-        password: data["password"],
-        phoneNumber: data["phoneNumber"],
-        fcmToken: data["fcmToken"],
-        lastSeen: data["lastSeen"],
-        createAt: data["createAt"],
-        isOnline: data["isOnline"],
-        blockedUser: data["blockedUser"],
+    return UserModel(
+         uid: doc.id,
+        email: data["email"] ?? "",
+        username: data["username"] ?? "",
+        name: data["name"] ?? "",
+        phoneNumber: data["phoneNumber"] ?? "",
+        fcmToken: data["fcmToken"]  ?? "",
+        lastSeen: data["lastSeen"]  ?? Timestamp.now(),
+        createAt: data["createAt"] ?? Timestamp.now(),
+        isOnline: data["isOnline"] ?? "",
+        blockedUser: List<String>.from(data["blockedUser"]),
+        password: data["password"] ?? "",
     );
   }
 
